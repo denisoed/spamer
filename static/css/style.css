@@ -1,0 +1,137 @@
+body {
+    background-color: #2B4162;
+}
+
+* {
+    outline: 0 !important;
+}
+
+.main {
+    height: 100vh;
+    position: relative;
+}
+
+.main::before {
+    content: '';
+    width: 2px;
+    height: 70%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    background-color: #F5F0F6;
+}
+
+.form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form input {
+    background-color: transparent;
+    border: 2px solid #F5F0F6;
+    padding: 6px 8px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #F5F0F6;
+    width: 350px;
+}
+
+/* Style for input placeholder */
+.form input::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #F5F0F6;
+}
+
+.form input::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #F5F0F6;
+}
+
+.form input:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #F5F0F6;
+}
+
+.form input:-moz-placeholder {
+    /* Firefox 18- */
+    color: #F5F0F6;
+}
+
+.form textarea {
+    background-color: transparent;
+    border: 2px solid #F5F0F6;
+    padding: 6px 8px;
+    border-radius: 8px;
+    color: #F5F0F6;
+    width: 350px;
+}
+
+/* Style for textarea placeholder */
+.form textarea::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #F5F0F6;
+}
+
+.form textarea::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #F5F0F6;
+}
+
+.form textarea:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #F5F0F6;
+}
+
+.form textarea:-moz-placeholder {
+    /* Firefox 18- */
+    color: #F5F0F6;
+}
+
+.form button {
+    background-color: #FB2A27;
+    border: none;
+    align-self: center;
+    padding: 15px;
+    border-radius: 8px;
+    color: #F5F0F6;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.form .left_part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100vh;
+}
+
+.form .right_part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100vh;
+}
+
+.form .right_part input {
+    width: 10px;
+    margin: 0;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.form label {
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.right_part .sel_portal {
+    display: flex;
+    align-items: center;
+}
