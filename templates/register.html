@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+<section class="register">
+    <div class="container">
+        <div class="row">
+            <div class="register_box">
+                <h1>Регистрация</h1>
+                <form action="/account/register/" method="POST" class="register_form">{% csrf_token %}
+                    {{ form }}
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+    
