@@ -3,9 +3,20 @@
 
 {% block content %}
     <div class="wrapper">
+
+        {% if messages %}
+            <ul class="messages" id="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
         <header>
             {% if user %}
-            <h4>{{ user }}</h4>
+            <h5 class="user_name">{{ user }}</h5>
             <a href="/account/logout/">Выйти</a>
             {% else %}
             <a href="/account/register/">Регистрация</a>
@@ -15,15 +26,28 @@
 
         <!-- Right panel -->
         <aside class="right_panel">
+            <div class="logo">
+                <a href="/main">Spamer</a>
+            </div>
             <!-- Button HTML (to Trigger Modal) -->
             <button class="add_portal" data-toggle="modal" href="#myModal" role="button">
                 <i class="fa fa-plus"></i>
             </button>
             <div class="list_portals">
                 
-                {% for portal in portals %}
-                    <button>{{ portal.name }}</button>
-                {% endfor %}
+                {% if portals %}
+                    {% for portal in portals %}
+                        <div class="the_portal selected_portal">
+                            <a href="/portal/delete/{{ portal.id }}/">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                            {{ portal.name }}
+                            <span></span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Добавьте порталы</p>
+                {% endif %}
                     
             </div>
         </aside>
@@ -36,14 +60,15 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>Do you want to save changes you made to document before closing?</p>
+                        <p>Пройдите аутентификацию!</p>
                     </div>
                     <form action="/portal/create/" method="POST" class="add_auth_new_portal">{% csrf_token %}
 
+                        <div class="inp_error"></div>
                         <div class="form-group">
                             <div class="input-group">
-                                <input type="text" name="login" placeholder="Login">
-                                <input type="text" name="password" placeholder="Password">
+                                <input type="text" class="portal_login" name="login" placeholder="Login">
+                                <input type="text" class="portal_password" name="password" placeholder="Password">
                             </div>
                             {{ portal_form }}
                             <select name="portals" id="select_portal">
@@ -54,7 +79,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Add new portal</button>
+                        <button type="submit" class="btn btn-primary add_portal_btn">Add new portal</button>
                     </form>
                     <div class="modal-footer">
                         {% comment %} <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> {% endcomment %}
@@ -66,7 +91,14 @@
         <!-- Working zone -->
         <section class="main">
             <div class="container">
+                
+                {% if portals %}
                 <form action="/send_spam/" method="POST" class="form">{% csrf_token %}
+
+                    <div class="selected_portals_form">
+                        <!-- Selected portals-->
+                    </div>
+
                     <div class="inputs_text">
                     <div class="form-group">
                         <!-- Input title -->
@@ -95,11 +127,13 @@
                         <input type="text" id="inp_url" name="url" placeholder="Url" autocomplete="off">
                     </div>
                     <!-- Textarea -->
-                    <textarea name="description" placeholder="Description"></textarea>
+                    <textarea id="mytextarea"></textarea>
                 </div>
                 <!-- Button -->
-                <button type="submit" class="btn_submit" id="btn_submit">Send now</button>
+                <button type="submit" class="btn_submit" id="btn_submit">Начать рассылку</button>
             </form>
+            {% endif %}
+
             </div>
         </section>
     </div>

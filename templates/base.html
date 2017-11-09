@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Spamer</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -20,8 +21,17 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
         crossorigin="anonymous"></script>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=b41yglt1orrf4d7e0h99o7cp3t3oz6j2wp21tj1h1y8w1jk7"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/errors.js' %}"></script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea',
+            plugins: ['paste', 'table', 'image', 'link', 'preview', 'textcolor', 'print', 'media'],
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+            toolbar2: "print preview media | forecolor backcolor",
+        });
+    </script>
 </body>
 </html>

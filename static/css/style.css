@@ -11,40 +11,127 @@ ul {
     width: 100%;
     height: 100vh;
     position: relative;
+}   
+
+/* ============== Messages ============== */
+.messages {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
 }
+
+.messages li {
+    list-style: none;
+    color: #F5F0F6;
+    padding: 8px 30px;
+}
+
+.messages .success {
+    background-color: rgba(0, 225, 142, 0.100);
+}
+
+.messages .error {
+    background-color: rgba(251, 39, 39, 0.100);
+}
+
+
 header {
     width: 100%;
-    height: 50px;
+    height: 30px;
     position: absolute;
     left: 0;
     top: 0;
-    background-color: #526187;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     z-index: 1;
 }
 
-header a {
+header .user_name {
+    color: #0D1130;
+    margin: 0;
     margin-right: 15px;
-    color: #F5F0F6;
+    font-size: 16px;
+    background-color: #00E18F;
+    padding: 4px;
+    font-family: 'Anton-regular', sans-serif;
 }
 
-/* Right panel */
+header a {
+    color: #F5F0F6;
+    margin: 0;
+    margin-right: 15px;
+    font-size: 14px;
+    background-color: #FB2A27;
+    padding: 3px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+
+
+/* ========================= */
+.inp_error {
+    color: #0D1130;
+    margin-bottom: 10px;
+}
+
+.inp_error li {
+    list-style: none;
+    margin-top: 8px;
+}
+
+.inp_error .fa {
+    color: #ff6361;
+    margin-right: 8px;
+}
+
+/* ============== Right panel ================== */
 .right_panel {
     width: 200px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     position: absolute;
     top: 0;
     left: 0;
     background-color: #0D1130;
     z-index: 1;
     box-sizing: border-box;
-    padding: 15px 0;
     box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.5);
+}
+
+.right_panel .logo {
+    width: 100%;
+    padding: 15px 0;
+    background-color: #00E18F;
+    text-align: center;
+    font-family: 'Anton-regular', sans-serif;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+
+.right_panel .logo a {
+    color: #0D1130;
+    text-decoration: none; 
+    position: relative;
+}
+
+.right_panel .logo a::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    position: absolute;
+    right: -10px;
+    top: 14px;
+    background-color: #FB2A27;
 }
 
 .right_panel .add_portal {
@@ -54,6 +141,10 @@ header a {
     justify-content: center;
     align-items: center;
     background-color: #526187;
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
     border: none;
     border-radius: 100%;
     cursor: pointer;
@@ -71,103 +162,135 @@ header a {
     margin-top: 30px;
     display: flex;
     flex-direction: column;
+    padding: 0 6px;
+}
+
+.right_panel .list_portals p {
+    width: 100%;
+    text-align: center;
+    color: #98989854;
+    background-color: rgba(251, 39, 39, 0.100);
+}
+
+.right_panel .the_portal {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(20, 25, 61);
+    color: #F5F0F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.3);
+    margin-bottom: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.right_panel .the_portal:hover {
+    background-color: rgb(30, 37, 77);
+}
+
+.right_panel .the_portal a {
+    position: absolute;
+    left: 15px;
+    padding: 7px;
+    text-decoration: none;
+    color: #D63932;
+    transition: all .2s ease;
+}
+
+.right_panel .the_portal a:hover {
+    background-color: #D63932;
+    color: #0D1130;
+}
+
+.right_panel .the_portal a .fa {
+    font-size: 18px;
+}
+
+.right_panel .the_portal span {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background-color: rgba(0, 225, 142, 0.801);
+    box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 16px;
+    right: 15px;
 }
 
 /* Styles */
 .main {
     width: 100%;
     height: 100vh;
-    background-image: url('../bg.jpeg');
-    background-size: cover;
-    background-position: center;
+    background-color: rgb(20, 25, 61);
     display: flex;
     align-items: center;
     position: relative;
 }
 
-.main::before {
-    content: '';
-    background-color: #000a207e;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    z-index: 0;
-}
-
 .form {
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: -15px auto 0;
+    padding: 15px;
+    background-color: #F5F0F6;
+    position: relative;
+    /* box-shadow: 0px 0px 55px rgba(0, 0, 0, 0.3); */
+    
 }
 
-.form input {
-    background-color: #07064680;
+.form::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -80px;
+    border-style: solid;
+    border-width: 80px 200px 0 0;
+    border-color: #00E18F transparent transparent transparent;
+}
+
+/* .form::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-style: solid;
+    border-width: 0 0 150px 350px;
+    border-color: transparent transparent #00E18F transparent;
+} */
+
+.form .form-group input {
+    width: 100%;
     padding: 6px 8px;
-    border: none;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    color: #F5F0F6;
-    width: 350px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5)
+    border: 1px solid #c2c1c1;
+    background-color: transparent;
 }
 
 /* Style for input placeholder */
 .form input::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: #F5F0F6;
+    color: #0D1130;
 }
 
 .form input::-moz-placeholder {
     /* Firefox 19+ */
-    color: #F5F0F6;
+    color: #0D1130;
 }
 
 .form input:-ms-input-placeholder {
     /* IE 10+ */
-    color: #F5F0F6;
+    color: #0D1130;
 }
 
 .form input:-moz-placeholder {
     /* Firefox 18- */
-    color: #F5F0F6;
-}
-
-.form textarea {
-    background-color: #07064680;
-    border: none;
-    padding: 6px 8px;
-    border-radius: 8px;
-    color: #F5F0F6;
-    width: 350px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5)
-}
-
-/* Style for textarea placeholder */
-.form textarea::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #F5F0F6;
-    font-size: 14px;
-}
-
-.form textarea::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #F5F0F6;
-    font-size: 14px;
-}
-
-.form textarea:-ms-input-placeholder {
-    /* IE 10+ */
-    color: #F5F0F6;
-    font-size: 14px;
-}
-
-.form textarea:-moz-placeholder {
-    /* Firefox 18- */
-    color: #F5F0F6;
-    font-size: 14px;
+    color: #0D1130;
 }
 
 .form .btn_submit {
@@ -195,47 +318,28 @@ header a {
     z-index: 1;
 }
 
-.form .inp_error {
-    color: #F5F0F6;
+/*================== Model window for add new portal =========================*/
+#myModal .modal-content {
+    background-color: #F5F0F6;
+}
+
+#myModal .modal-content input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #0D1130;
+    padding: 8px 15px;
     margin-bottom: 10px;
 }
 
-.form .inp_error li {
-    list-style: none;
+#select_portal {
+    align-self: center;
+    background-color: transparent;
+    border: none;
 }
-
-.form .inp_error .fa{
-    color: #ff6361;
-    margin-right: 8px;
-}
-
-/* Inputs checkbox */
-.form .inputs_checkbox {
+.add_auth_new_portal {
     display: flex;
-    justify-content: center;
-    width: 100%;
-    z-index: 1;
+    flex-direction: column;
 }
-
-.form .inputs_checkbox input {
-    width: 10px;
-    margin: 0;
-    width: 17px;
-    height: 17px;
-    cursor: pointer;
-}
-
-.form label {
-    padding-left: 30px;
-    cursor: pointer;
-}
-
-.inputs_checkbox .sel_portal {
-    display: flex;
-    align-items: center;
-}
-
-/* Select portal form */
 .add_auth_new_portal label {
     display: none;
 }
@@ -249,6 +353,10 @@ header a {
     width: 50%;
     display: flex;
     flex-direction: column;
+}
+
+.add_auth_new_portal .btn-primary {
+    align-self: center;
 }
 
 /* ===================== Register style ===================== */
@@ -291,7 +399,7 @@ header a {
 .register_form {
     display: flex;
     flex-direction: column;
-    background-color: #393546;
+    background-color: #0D1130;
     padding: 40px 30px;
     box-shadow: 3px 3px 25px 2px rgba(0, 0, 0, 0.5);
     z-index: 1;
@@ -317,7 +425,7 @@ header a {
     color: #00E18F;
 }
 
-/* Style for textarea placeholder */
+/*  ================ Style for textarea placeholder ================== */
 
 .register_form input::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
@@ -354,4 +462,3 @@ header a {
     cursor: pointer;
     align-self: center;
 }
-
