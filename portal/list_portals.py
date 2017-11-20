@@ -8,6 +8,8 @@ list_portals = [
         'inp_title': 'title',
         'inp_url': 'url',
         'inp_text': 'text',
+        'auth_by': '<form method="post" action="login">',
+        'auth_complete': '<span class="pagetop">'
     },
     {
         'name': 'Golang news',
@@ -18,6 +20,8 @@ list_portals = [
         'inp_title': 'name',
         'inp_url': 'url',
         'inp_text': 'summary',
+        'auth_by': '<form action="/users/login" method="post">',
+        'auth_complete': '<li class="user_badge" alt="Google Go Links">'
     },
     {
         'name': 'Reddit',
@@ -27,6 +31,8 @@ list_portals = [
         'inp_password': 'passwd',
         'inp_title': 'title',
         'inp_text': 'description',
+        'auth_by': 'action="https://www.reddit.com/post/login"',
+        'auth_complete': '<span class="user">'
     },
     {
         'name': 'Habrahabr',
@@ -37,5 +43,7 @@ list_portals = [
         'inp_title': 'title',
         'inp_url': 'url',
         'inp_text': 'text',
+        'auth_by': '<form action="/ajax/login/" class="s-form login_form validateble" id="login_form" method="post" data-remote="true" novalidate >',
+        'auth_complete': 'class="user-info__nickname"'
     }
 ]
