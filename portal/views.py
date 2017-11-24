@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import PortalForm
 from .list_portals import list_portals
-from main.handler import auth_portal
+from .handler import auth_portal
 from .models import Portal
 from django.contrib import messages
 from django.contrib import auth
@@ -25,7 +25,7 @@ def create_portal(request):
             else:
                 # Auth user in selected portal and create portal in database 
                 auth_portal_complate = auth_portal(portal, log_pass, request)
-                if auth_portal_complate == True:
+                if auth_portal_complate is True:
                     user = auth.get_user(request).username
                     create_new_portal.user = user
                     create_new_portal.save()

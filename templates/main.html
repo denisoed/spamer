@@ -72,7 +72,7 @@
                             </div>
                             {{ portal_form }}
                             <select name="portals" id="select_portal">
-                                <option value="Hacker news">Hacker news</option>
+                                <option value="Hacker news" selected>Hacker news</option>
                                 <option value="Golang news">Golang news</option>
                                 <option value="Reddit">Reddit</option>
                                 <option value="Habrahabr">Habrahabr</option>
@@ -87,16 +87,18 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Working zone -->
         <section class="main">
             <div class="container">
+                <h1 class="main_bg">Spamer</h1>
                 
                 {% if portals %}
                 <form action="/send_spam/" method="POST" class="form">{% csrf_token %}
 
-                    <div class="selected_portals_form">
-                        <!-- Selected portals-->
+                    <div class="selected_portals">
+                        <!-- Selected portals-->    
+                        <input type="text" value="Reddit" name="selected_portal">
                     </div>
 
                     <div class="inputs_text">
@@ -133,7 +135,6 @@
                 <button type="submit" class="btn_submit" id="btn_submit">Начать рассылку</button>
             </form>
             {% endif %}
-
             </div>
         </section>
     </div>

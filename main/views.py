@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .handler import send_spam
+from portal.handler import send_spam
 from portal.forms import PortalForm
 from portal.models import Portal
 from django.contrib import auth
@@ -27,6 +27,9 @@ def main(request):
                         'length': 'Заголовок должен быть более 5 и менее 50 символов!'
                     }
                 else:
+                    # portals = []
+                    # for portal in range(len(request.POST.get('den'))):
+                    #     portals.append(request.POST.getlist('den')[portal])
                     input_data = {
                         'title': request.POST.get('title'),
                         'url': request.POST.get('url'),
@@ -35,8 +38,10 @@ def main(request):
                     context = {
                         'portal_form': portal_form
                     }
+                    print(request.POST.getlist('den'))
 
-                    send_spam(input_data, portals)
+                    # Send spam
+                    # send_spam(input_data, portals)
                     return redirect('/main/')
         return render(request, 'main.html', context)
     else:

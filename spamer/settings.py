@@ -86,6 +86,9 @@ DATABASES = {
         'PASSWORD': 'gorod312',
         'HOST': 'localhost',
         'PORT': '',
+        'TEST': {
+            'NAME': 'spamer_test',
+        },
     }
 }
 

@@ -13,6 +13,16 @@ ul {
     position: relative;
 }   
 
+.the_portal_disable {
+    background-color: rgba(20, 25, 61, 0.26) !important;
+    box-shadow: inset 1px 1px 8px rgba(0, 0, 0, 0.5) !important;
+    color: #7979798c !important;
+}
+
+.lamp_disable {
+    background-color: rgba(225, 0, 0, 0.21) !important;
+}
+
 /* ============== Messages ============== */
 .messages {
     position: absolute;
@@ -184,7 +194,7 @@ a:hover {
     margin-bottom: 8px;
     position: relative;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: all .5s ease;
 }
 
 .right_panel .the_portal:hover {
@@ -218,6 +228,7 @@ a:hover {
     position: absolute;
     top: 16px;
     right: 15px;
+    transition: all .5s ease;
 }
 
 /* Styles */
@@ -230,6 +241,32 @@ a:hover {
     position: relative;
 }
 
+.main_bg {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    color: #526187;
+    opacity: 0.1;
+    font-size: 162px;
+    font-family: 'Anton-regular', sans-serif;
+    text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+}
+
+.main_bg::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    bottom: 30px;
+    right: -30px;
+    background-color: #FB2A27;
+    border-radius: 100%;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
 .form {
     max-width: 600px;
     display: flex;
@@ -239,11 +276,9 @@ a:hover {
     padding: 15px;
     background-color: #F5F0F6;
     position: relative;
-    /* box-shadow: 0px 0px 55px rgba(0, 0, 0, 0.3); */
-    
 }
 
-.form::before {
+/* .form::before {
     content: '';
     display: block;
     position: absolute;
@@ -252,7 +287,7 @@ a:hover {
     border-style: solid;
     border-width: 80px 200px 0 0;
     border-color: #00E18F transparent transparent transparent;
-}
+} */
 
 /* .form::after {
     content: '';
