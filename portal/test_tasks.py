@@ -1,6 +1,7 @@
-from django.test import TestCase, Client
-from . import tasks
 import requests
+
+from django.test import TestCase, Client
+from portal import tasks
 
 
 class TestTasks(TestCase):
@@ -53,13 +54,15 @@ class TestTasks(TestCase):
     def test_successful_auth_in_portal(self):
         login = 'denisoed'
         password = 'gorod312'
-        response = requests.post('https://news.ycombinator.com/login', data={'acct': login, 'pw': password})
+        response = requests.post('https://news.ycombinator.com/login',
+                                 data={'acct': login, 'pw': password})
         res_text = response.text
         self.assertNotEqual(res_text.find('logout'), -1)
 
     def test_failed_auth_in_portal_incorrect_data(self):
         login = 'silvester-stalone'
         password = 'my-best-password'
-        response = requests.post('https://news.ycombinator.com/login', data={'acct': login, 'pw': password})
+        response = requests.post('https://news.ycombinator.com/login',
+                                 data={'acct': login, 'pw': password})
         res_text = response.text
         self.assertEqual(res_text.find('logout'), -1)

@@ -21,7 +21,6 @@ class TestForm(TestCase):
         data = {'name': "Hacker News", 'user': "admin",
                 'login': 'hjhk', 'password': 'dfdfd'}
         form = PortalForm(data=data)
-
         self.assertTrue(form.is_valid(), True)
 
     def test_user_form__is_not_valid(self):
@@ -47,52 +46,9 @@ class ViewTest(TestCase):
             'portals': 'Hacker news'
         }
 
-    def test_for_auth_user(self):
-        data = {'name': "Hacker News",
-                'login': 'login',
-                'password': 'dfdfd'}
-
-        r = self.client.get(reverse('portal:create_portal'), data=data)
-
-        self.assertRedirects(r, '/main/',
-                                status_code=302, target_status_code=302)
-
-    def test_if_portal_form_valid_should_return_data_in_form(self):
-
-        data = {'name': "Hacker News", 'user': "admin",
-                'login': 'hjhk', 'password': 'dfdfd'}
-
-        r = self.client.post(reverse('portal:create_portal'), data=data)
-
-        self.assertEqual(r.status_code, 200)
-
-    def test_for_false_verification_form(self):
-
-        data = {'name': "Hacker News", 'user': "", 'login': 'hjhk'}
-
-        r = self.client.post(reverse('portal:create_portal'), data=data)
-
-        self.assertEqual(r.content, "Форма не валидна")
-
-        self.assertRedirects(r, '/main/',
-                             status_code=302, target_status_code=302)
-
-    def test_if_portal_form_valid_should_return_text(self):
-        data = {'name': "Hacker News", 'user': "admin",
-                'login': 'hjhk', 'password': 'dfdfd'}
-
-        response = self.client.post(reverse('portal:create_portal'),
-                                    data=data)
-
-        self.assertEqual(response.status_code, 302)
-
-        self.assertEqual(response.context, "Портал уже"
-                                           " существует в вашем списке!")
-
     def test_for_delete_portals(self):
 
         data = {'login': 'login', 'password': '2323232'}
-
         r = self.client.post(reverse('portal:delete_portal',
                                      kwargs={'id_portal': 1}), data=data)
         self.assertEqual(r.status_code, 302)
