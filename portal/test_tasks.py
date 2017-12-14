@@ -1,6 +1,7 @@
-from django.test import TestCase, Client
-from . import tasks
 import requests
+
+from django.test import TestCase, Client
+from portal import tasks
 
 
 class TestTasks(TestCase):
