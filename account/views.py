@@ -14,8 +14,9 @@ def register_user(request):
         form = UserCreationForm(request.POST or None)
         if form.is_valid():
             form.save()
-            new_user = auth.authenticate(username=form.cleaned_data['username'],
-                                         password=form.cleaned_data['password1'])
+            new_user = auth.authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'])
             auth.login(request, new_user)
             return redirect('/account/login/')
         else:
