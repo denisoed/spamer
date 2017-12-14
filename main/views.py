@@ -18,7 +18,8 @@ def catch_data(request):
         portal_form = PortalForm(request.POST or None)
         if portal_form.is_valid():
             portal_sel = request.POST.getlist('selected_portal')
-            if request.POST.get('title') == '' and request.POST.get('url') == '':
+            if request.POST.get('title') == '' \
+                    and request.POST.get('url') == '':
                 context = {
                     'empty': 'Это поле обязательное!'}
             else:
@@ -31,5 +32,5 @@ def catch_data(request):
                     'portal_form': portal_form
                 }
                 send_spam(input_data, portal_sel)
-                return redirect('/main/')  
+            return redirect('/main/')
     return render(request, 'index.html', context)

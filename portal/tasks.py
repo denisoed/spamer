@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 from django.contrib import messages
-from spamerBlog.celery import app
 from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
@@ -20,6 +19,7 @@ def get_login_page(request, portal, login, password):
     """ Authenticate selected portal """
     try:
         url_login = portal['url_auth']
+        print(url_login)
         GRAB.setup(timeout=10, connect_timeout=10)
         GRAB.go(url_login, log_file='templates/grab/bug_auth_portal.html')
         GRAB.doc.text_search(portal['auth_by'])
@@ -27,7 +27,8 @@ def get_login_page(request, portal, login, password):
         return True
     except DataNotFound:
         messages.error(
-            request, "Ошибка при получении формы аутентификации. Попробуйте позже!")
+            request, "Ошибка при получении формы аутентификации. "
+                     "Попробуйте позже!")
         return False
 
 
@@ -49,7 +50,6 @@ def auth_portal(request, portal, login, password):
         return False
 
 
-# @app.task
 def send_spam(input_data, portals):
     portals_list = get_selected_portal(portals)
     for p in range(len(portals_list)):

@@ -27,10 +27,6 @@ class TestAuth(TestCase):
         store.save()
         self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
 
-    def test_register_user(self):
-        response = self.client.post('/account/register/', self.data)
-        self.assertEquals(response.status_code, 302)
-
     def test_login_user(self):
         response = self.client.post('/account/login/', self.user)
         self.assertEquals(response.status_code, 302)
@@ -46,10 +42,6 @@ class TestAuth(TestCase):
         response = self.client.get('/account/logout/')
         self.assertEquals(response.status_code, 302)
         self.assertTemplateUsed('login.html')
-
-    def test_get_register_page(self):
-        response = self.client.get('/account/register/')
-        self.assertEquals(response.status_code, 200)
 
     def test_get_login_page(self):
         response = self.client.get('/account/login/')
