@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  web:
+    build: .
+    command: bash -c "python3 manage.py migrate; python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    links:
+      - celery
+    depends_on:
+      - celery 
+
+  redis:
+    image: redis
+
+  celery:
+    image: celery
+    build: .
+    volumes:
+      - "youtubeToMp3/celery.py"
+    command: bash -c "celery worker -A spamerBlog --loglevel=INFO" 
+    links:
+      - redis
+    depends_on:
+      - redis

@@ -4,6 +4,7 @@ from django.contrib import messages
 from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
+from spamerBlog.celery import app
 
 
 default_logging()
@@ -50,6 +51,7 @@ def auth_portal(request, portal, login, password):
         return False
 
 
+@app.task
 def send_spam(input_data, portals):
     portals_list = get_selected_portal(portals)
     for p in range(len(portals_list)):
