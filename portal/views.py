@@ -9,42 +9,35 @@ from .tasks import get_login_page
 from .models import Portal
 
 
-def catch_portal_form(request):
+def create_portal(request):
     if request.method == 'POST':
         portal_form = PortalForm(request.POST or None)
         if portal_form.is_valid():
             selected_portal = portal_form.save(commit=False)
+            obj_portal = find_selected_portal(request)
             login = portal_form.cleaned_data['login']
+            print(type(login))
             password = portal_form.cleaned_data['password']
-            return selected_portal, login, password
+            if Portal.objects.filter(name=selected_portal.name):
+                messages.error(request,
+                               "Портал уже существует в вашем списке!")
+            else:
+                auth_portal_complate = get_login_page(request, obj_portal,
+                                                      login, password)
+                if auth_portal_complate is True:
+                    user = auth.get_user(request).username
+                    selected_portal.user = user
+                    selected_portal.save()
+                    return redirect('/main/')
+                else:
+                    messages.error(request,
+                                   "Не получилось аутентифицироваться")
 
         else:
             messages.error(request, "Форма не валидна")
-            return redirect('/main/')
+        return redirect('/main/')
     else:
         return HttpResponseRedirect('/main/')
-
-
-def create_portal(request):
-    verificated_data = catch_portal_form(request)
-    obj_portal = find_selected_portal(request)
-    print(obj_portal)
-    selected_portal = verificated_data[0]
-    login = verificated_data[1]
-    password = verificated_data[2]
-    if Portal.objects.filter(name=selected_portal.name):
-        messages.error(request, "Портал уже существует в вашем списке!")
-    else:
-        auth_portal_complate = get_login_page(request, obj_portal,
-                                              login, password)
-        if auth_portal_complate is True:
-            user = auth.get_user(request).username
-            selected_portal.user = user
-            selected_portal.save()
-            return redirect('/main/')
-        else:
-            messages.error(request,
-                           "Не получилось аутентифицироваться на портале")
 
 
 def find_selected_portal(request):
