@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .forms import PortalForm
-from .models import Portal
+from portal.forms import PortalForm
+from portal.models import Portal
 
 
 client = Client()
@@ -55,13 +55,17 @@ class ViewTest(TestCase):
     def test_if_portal_exists(self):
         data = {'name': "Hacker News", 'user': "admin",
                 'login': 'user', 'password': '12345678'}
-        portal_models = Portal.objects.create(name='Hacker News', user="user1")
+        portal_models = Portal.objects.create(name='Hacker News',
+                                              user="user1")
         print(portal_models)
         r = self.client.post(reverse('portal:create_portal'), data=data)
         self.assertEqual(r.status_code, 302)
 
     def test_for_find_selected_portal(self):
-        portal_list = [{
+        portal_models = Portal.objects.create(name='Hacker News',
+                                              user="user1")
+        print(portal_models)
+        data = {
             'name': 'Hacker news',
             'url_auth': 'https://news.ycombinator.com/login',
             'url_submit': 'https://news.ycombinator.com/submit',
@@ -72,11 +76,10 @@ class ViewTest(TestCase):
             'inp_text': 'text',
             'auth_by': '<form method="post" action="login">',
             'auth_complete': '<span class="pagetop">'
+        }
 
-        }]
-        print(portal_list)
-        r = self.client.post(reverse('portal:create_portal'),
-                             data=self.data)
+        r = self.client.post(reverse('portal:create_portal'), data=data)
+        print(r.content)
         self.assertEqual(r.status_code, 302)
 
     def test_for_delete_portals(self):

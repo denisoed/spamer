@@ -1,5 +1,4 @@
 import requests
-
 from django.test import TestCase, Client
 from portal import tasks
 

@@ -20,7 +20,6 @@ def get_login_page(request, portal, login, password):
     """ Authenticate selected portal """
     try:
         url_login = portal['url_auth']
-        print(url_login)
         GRAB.setup(timeout=10, connect_timeout=10)
         GRAB.go(url_login, log_file='templates/grab/bug_auth_portal.html')
         GRAB.doc.text_search(portal['auth_by'])
