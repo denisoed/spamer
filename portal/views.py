@@ -16,7 +16,6 @@ def create_portal(request):
             selected_portal = portal_form.save(commit=False)
             obj_portal = find_selected_portal(request)
             login = portal_form.cleaned_data['login']
-            print(type(login))
             password = portal_form.cleaned_data['password']
             if Portal.objects.filter(name=selected_portal.name):
                 messages.error(request,
