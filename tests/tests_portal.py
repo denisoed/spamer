@@ -62,24 +62,8 @@ class ViewTest(TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_for_find_selected_portal(self):
-        portal_models = Portal.objects.create(name='Hacker News',
-                                              user="user1")
-        print(portal_models)
-        data = {
-            'name': 'Hacker news',
-            'url_auth': 'https://news.ycombinator.com/login',
-            'url_submit': 'https://news.ycombinator.com/submit',
-            'inp_login': 'acct',
-            'inp_password': 'pw',
-            'inp_title': 'title',
-            'inp_url': 'url',
-            'inp_text': 'text',
-            'auth_by': '<form method="post" action="login">',
-            'auth_complete': '<span class="pagetop">'
-        }
+        r = self.client.post(reverse('portal:create_portal'), data=self.data)
 
-        r = self.client.post(reverse('portal:create_portal'), data=data)
-        print(r.content)
         self.assertEqual(r.status_code, 302)
 
     def test_for_delete_portals(self):
