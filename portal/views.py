@@ -14,12 +14,12 @@ def create_portal(request):
         portal_form = PortalForm(request.POST or None)
         if portal_form.is_valid():
             selected_portal = portal_form.save(commit=False)
-            obj_portal = find_selected_portal(request)
+            obj_portal = find_selected_portal(request.POST.get('portals'))
             login = portal_form.cleaned_data['login']
             password = portal_form.cleaned_data['password']
             if Portal.objects.filter(name=selected_portal.name):
-                messages.error(request,
-                               "Портал уже существует в вашем списке!")
+                messages.error(
+                    request, "Портал уже существует в вашем списке!")
             else:
                 auth_portal_complate = get_login_page(request, obj_portal,
                                                       login, password)
@@ -29,8 +29,8 @@ def create_portal(request):
                     selected_portal.save()
                     return redirect('/main/')
                 else:
-                    messages.error(request,
-                                   "Не получилось аутентифицироваться")
+                    messages.error(
+                        request, "Не получилось аутентифицироваться")
 
         else:
             messages.error(request, "Форма не валидна")
@@ -39,9 +39,9 @@ def create_portal(request):
         return HttpResponseRedirect('/main/')
 
 
-def find_selected_portal(request):
+def find_selected_portal(portal_name):
     for i in range(len(list_portals)):
-        if list_portals[i]['name'] == request.POST.get('portals'):
+        if list_portals[i]['name'] == portal_name:
             portal = list_portals[i]
             return portal
 

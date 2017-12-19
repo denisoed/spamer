@@ -2,12 +2,14 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from portal.forms import PortalForm
 from portal.models import Portal
+from portal.views import find_selected_portal
 
 
 client = Client()
 
 
 class PortalTest(TestCase):
+
     def test_for_create_portal(self):
         portal_models = Portal.objects.create(name='Hacker News', user="user1")
         self.assertEqual(portal_models.name, 'Hacker News')
@@ -61,10 +63,16 @@ class ViewTest(TestCase):
         r = self.client.post(reverse('portal:create_portal'), data=data)
         self.assertEqual(r.status_code, 302)
 
-    def test_for_find_selected_portal(self):
-        r = self.client.post(reverse('portal:create_portal'), data=self.data)
-
+    def test_form_is_not_valid(self):
+        data = {'name': "Hacker News", 'user': "admin"}
+        r = self.client.post(reverse('portal:create_portal'), data=data)
         self.assertEqual(r.status_code, 302)
+
+    def test_for_find_selected_portal(self):
+        data = 'Hacker news'
+        name_obj = find_selected_portal(data)['name']
+        print(name_obj)
+        self.assertEqual(name_obj, data)
 
     def test_for_delete_portals(self):
 

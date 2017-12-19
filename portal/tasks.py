@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
+import requests
+
 from django.contrib import messages
 from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
 from spamerBlog.celery import app
+from bs4 import BeautifulSoup
 
 
 default_logging()
@@ -23,8 +26,7 @@ def get_login_page(request, portal, login, password):
         GRAB.setup(timeout=10, connect_timeout=10)
         GRAB.go(url_login, log_file='templates/grab/bug_auth_portal.html')
         GRAB.doc.text_search(portal['auth_by'])
-        auth_portal(request, portal, login, password)
-        return True
+        return auth_portal(request, portal, login, password)
     except DataNotFound:
         messages.error(
             request, "Ошибка при получении формы аутентификации. "
@@ -73,3 +75,20 @@ def get_selected_portal(port_list):
             if str(port_list[i]) == list_portals[p]['name']:
                 portals.append(list_portals[p])
     return portals
+
+
+# //////////////// Logout portal ///////////////// #
+def logout_portal(portal):
+    log_portal = get_selected_logout_portal(portal)
+    resp_html = requests.get(log_portal['url_logout'])
+    resp = BeautifulSoup(resp_html.content, 'html.parser')
+    print(resp)
+
+
+def get_selected_logout_portal(portal):
+    name_portal = portal[0].name
+    for i in range(len(list_portals)):
+        if list_portals[i]['name'] == name_portal:
+            return list_portals[i]
+        else:
+            return False
