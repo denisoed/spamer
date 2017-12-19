@@ -7,7 +7,6 @@ from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
 from spamerBlog.celery import app
-from bs4 import BeautifulSoup
 
 
 default_logging()
@@ -81,8 +80,7 @@ def get_selected_portal(port_list):
 def logout_portal(portal):
     log_portal = get_selected_logout_portal(portal)
     resp_html = requests.get(log_portal['url_logout'])
-    resp = BeautifulSoup(resp_html.content, 'html.parser')
-    print(resp)
+    print(resp_html)
 
 
 def get_selected_logout_portal(portal):
