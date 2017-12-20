@@ -33,6 +33,7 @@ class TestTasks(TestCase):
             {
                 'name': 'Hacker news',
                 'url_auth': 'https://news.ycombinator.com/login',
+                'url_logout': 'https://news.ycombinator.com/',
                 'url_submit': 'https://news.ycombinator.com/submit',
                 'inp_login': 'acct',
                 'inp_password': 'pw',
