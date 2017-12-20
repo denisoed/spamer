@@ -15,7 +15,6 @@ class ViewTest(TestCase):
             'title': '',
             'url': '',
             'description': ''
-
         }
         self.small_data = {
             'title': 't',
@@ -39,12 +38,14 @@ class ViewTest(TestCase):
         self.assertTemplateUsed('index.html')
         self.assertContains(responce, 'Error', 0)
 
-    def test_empty_data(self):
-        responce = self.client.post('/main/', self.empty_data, follow=True)
-        self.assertTemplateUsed('index.html')
-        self.assertEqual(responce.status_code, 200)
+    def test_for_getlist_method(self):
+        data = {'name': "Hacker News", 'user': "admin",
+                'login': 'user', 'password': '12345678'}
+        print(type(data))
+        r = self.client.post(reverse('main:post_article'), data=data)
+        self.assertEqual(r.status_code, 302)
 
-    def test_length_of_data(self):
-        responce = self.client.post('/main/', self.small_data, follow=True)
+    def test_empty_data(self):
+        responce = self.client.get('/main/', self.empty_data, follow=True)
         self.assertTemplateUsed('index.html')
         self.assertEqual(responce.status_code, 200)

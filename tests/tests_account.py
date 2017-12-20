@@ -1,6 +1,4 @@
 from django.test import TestCase, Client
-from importlib import import_module
-from django.conf import settings
 
 
 class TestAuth(TestCase):
@@ -21,18 +19,6 @@ class TestAuth(TestCase):
             'password': 'qwerty123'
         }
 
-    def create_session(self):
-        session_engine = import_module(settings.SESSION_ENGINE)
-        store = session_engine.SessionStore()
-        store.save()
-        self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
-
-    def test_login_user(self):
-        response = self.client.post('/account/login/', self.user)
-        self.assertEquals(response.status_code, 302)
-        self.assertRedirects(response, '/account/login/',
-                                       status_code=302, target_status_code=200)
-
     def test_if_user_is_not_None(self):
         response = self.client.post('/account/login/', self.user1)
         self.assertEquals(response.status_code, 302)
@@ -43,7 +29,33 @@ class TestAuth(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertTemplateUsed('login.html')
 
+    def test_get_register_page(self):
+        response = self.client.get('/account/register/')
+        self.assertEquals(response.status_code, 200)
+
+    def test_register_user(self):
+        response = self.client.post('/account/register/', self.data)
+        self.assertEquals(response.status_code, 302)
+
     def test_get_login_page(self):
         response = self.client.get('/account/login/')
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed('login.html')
+
+    def test_login_user(self):
+        user = self.client.post('/account/register/',
+                                self.data)
+        print(user)
+        response = self.client.post('/account/login/',
+                                    self.user)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, '/account/login/',
+                             status_code=302, target_status_code=200)
+
+    def test_form(self):
+        data = {
+            'username': '',
+            'password1': 'qwerty123'
+        }
+        response = self.client.post('/account/register', data=data)
+        self.assertEqual(response.status_code, 301)
