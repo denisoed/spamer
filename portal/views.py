@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib import auth
 from .forms import PortalForm
 from .list_portals import list_portals
-from .tasks import get_login_page
+from . import tasks
 from .models import Portal
 
 
@@ -21,8 +21,8 @@ def create_portal(request):
                 messages.error(
                     request, "Портал уже существует в вашем списке!")
             else:
-                auth_portal_complate = get_login_page(request, obj_portal,
-                                                      login, password)
+                auth_portal_complate = tasks.go_authenticate(
+                    request, obj_portal, login, password)
                 if auth_portal_complate is True:
                     user = auth.get_user(request).username
                     selected_portal.user = user
@@ -30,7 +30,7 @@ def create_portal(request):
                     return redirect('/main/')
                 else:
                     messages.error(
-                        request, "Не получилось аутентифицироваться")
+                        request, auth_portal_complate)
 
         else:
             messages.error(request, "Форма не валидна")

@@ -14,6 +14,7 @@ factory-boy==2.9.2
 Faker==0.8.7
 flake8==3.5.0
 grab==0.6.38
+html5lib==1.0.1
 idna==2.6
 isort==4.2.15
 kombu==4.1.0
@@ -37,5 +38,6 @@ text-unidecode==1.1
 urllib3==1.22
 user-agent==0.1.9
 vine==1.1.4
+webencodings==0.5.1
 weblib==0.1.25
 wrapt==1.10.11

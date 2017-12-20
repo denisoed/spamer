@@ -2,11 +2,13 @@
 import logging
 import requests
 
+
 from django.contrib import messages
 from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
 from spamerBlog.celery import app
+from bs4 import BeautifulSoup
 
 
 default_logging()
@@ -18,37 +20,42 @@ LOGGER.setLevel(logging.DEBUG)
 GRAB = Grab()
 
 
-def get_login_page(request, portal, login, password):
+def go_authenticate(request, portal, login, password):
+    login_page = get_login_page(portal, login, password)
+    if login_page is True:
+        messages.success(request, "Аутентификация прошла успешно!")
+        return True
+    else:
+        messages.error(request, login_page)
+        return False
+
+
+def get_login_page(portal, login, password):
     """ Authenticate selected portal """
     try:
         url_login = portal['url_auth']
         GRAB.setup(timeout=10, connect_timeout=10)
-        GRAB.go(url_login, log_file='templates/grab/bug_auth_portal.html')
-        GRAB.doc.text_search(portal['auth_by'])
-        return auth_portal(request, portal, login, password)
+        response = GRAB.go(
+            url_login, log_file='templates/grab/bug_auth_portal.html')
+        response.text_search(portal['auth_by'])
+        return auth_portal(response, portal, login, password)
     except DataNotFound:
-        messages.error(
-            request, "Ошибка при получении формы аутентификации. "
-                     "Попробуйте позже!")
-        return False
+        return "Ошибка при получении формы аутентификации. Попробуйте позже!"
 
 
-def auth_portal(request, portal, login, password):
+def auth_portal(response, portal, login, password):
     """ Authenticate selected portal """
     try:
-        GRAB.doc.set_input(portal['inp_login'], login)
-        GRAB.doc.set_input(portal['inp_password'], password)
-        GRAB.doc.submit()
-        auth_form = GRAB.doc.text_search(portal['auth_complete'])
+        response.set_input(portal['inp_login'], login)
+        response.set_input(portal['inp_password'], password)
+        sub_resp = response.submit()
+        auth_form = sub_resp.text_search(portal['auth_complete'])
         if auth_form is True:
-            messages.success(request, "Аутентификация прошла успешно!")
             return True
         else:
-            messages.error(request, "Введите корректный логин или пароль!")
-            return False
+            return "Введите корректный логин или пароль"
     except DataNotFound:
-        messages.error(request, "Вы уже аутентифицированы!")
-        return False
+        return "Вы уже аутентифицированы"
 
 
 @app.task
@@ -79,8 +86,10 @@ def get_selected_portal(port_list):
 # //////////////// Logout portal ///////////////// #
 def logout_portal(portal):
     log_portal = get_selected_logout_portal(portal)
-    resp_html = requests.get(log_portal['url_logout'])
-    print(resp_html)
+    resp_html = requests.post(log_portal['url_logout'])
+    response = BeautifulSoup(resp_html.content, 'html.parser')
+    block_for_html_btn = response.findAll("span", {"class": "pagetop"})
+    print(block_for_html_btn)
 
 
 def get_selected_logout_portal(portal):
