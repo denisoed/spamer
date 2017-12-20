@@ -60,23 +60,24 @@
                 <form action="/portal/create/" method="POST" class="add_auth_new_portal">{% csrf_token %}
 
                     <div class="inp_error"></div>
-                    <div class="form-group">
-                        {{ portal_form }}
+                    <div class="inputs_and_select">
 
-                    </div>
-                    <select name="portals" id="select_portal">
+                        <div class="form-group">
+                            {{ portal_form }}
+                        </div>
+                        <select name="portals" id="select_portal">
                             <option value="Hacker news" selected>Hacker news</option>
                             <option value="Golang news">Golang news</option>
                             <option value="Reddit">Reddit</option>
                             <option value="Habrahabr">Habrahabr</option>
                         </select>
-
-                    <button type="submit" class="btn btn-primary add_portal_btn">Add new portal</button>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="add_portal_btn">Add new portal</button>
+                        <button type="button" class="close_modal_window" data-dismiss="modal">Close</button>
+                    </div>
                 </form>
-                <div class="modal-footer">
-                    {% comment %}
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> {% endcomment %}
-                </div>
             </div>
         </div>
     </div>

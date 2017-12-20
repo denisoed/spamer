@@ -21,6 +21,7 @@ def register_user(request):
             return redirect('/account/login/')
         else:
             messages.error(request, "Ошибка сервера")
+            return redirect('/account/login/')
     else:
         return render(request, 'register.html', context)
 
