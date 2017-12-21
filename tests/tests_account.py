@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from django.urls import reverse
 
 
 class TestAuth(TestCase):
@@ -43,9 +44,8 @@ class TestAuth(TestCase):
         self.assertTemplateUsed('login.html')
 
     def test_login_user(self):
-        user = self.client.post('/account/register/',
-                                self.data)
-        print(user)
+        self.client.post('/account/register/',
+                         self.data)
         response = self.client.post('/account/login/',
                                     self.user)
         self.assertEquals(response.status_code, 302)
@@ -59,3 +59,13 @@ class TestAuth(TestCase):
         }
         response = self.client.post('/account/register', data=data)
         self.assertEqual(response.status_code, 301)
+
+    def test_for_invalid_form(self):
+        data = {
+            'username': '',
+            'password': '',
+            'password1': ''
+        }
+        response = self.client.post(reverse('account:register user'),
+                                    data=data)
+        self.assertEqual(response.status_code, 302)

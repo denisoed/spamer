@@ -36,12 +36,11 @@ class ViewTest(TestCase):
         responce = self.client.post(reverse('main:post_article'),
                                     self.input_data)
         self.assertTemplateUsed('index.html')
-        self.assertContains(responce, 'Error', 0)
+        self.assertEqual(responce.status_code, 302)
 
     def test_for_getlist_method(self):
         data = {'name': "Hacker News", 'user': "admin",
                 'login': 'user', 'password': '12345678'}
-        print(type(data))
         r = self.client.post(reverse('main:post_article'), data=data)
         self.assertEqual(r.status_code, 302)
 
