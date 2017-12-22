@@ -6,7 +6,6 @@ from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
 from spamerBlog.celery import app
-from django.contrib import messages
 
 
 default_logging()

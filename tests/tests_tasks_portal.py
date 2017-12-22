@@ -4,7 +4,7 @@ import unittest
 from django.test import TestCase, Client
 from unittest.mock import patch
 from portal import tasks
-from grab import Grab, DataNotFound
+from grab import Grab
 from django.test import RequestFactory
 
 
@@ -103,16 +103,6 @@ class TestTasks(TestCase):
     @patch('portal.tasks.send')
     def test_send_spam(self, mock_fill_fields, mock_send):
         portal_name = ['Hacker news', 'Hacker news']
-        portals = [
-            {
-                'name': 'Hacker news',
-                'url_submit': 'https://news.ycombinator.com/submit',
-            },
-            {
-                'name': 'Hacker news',
-                'url_submit': 'https://news.ycombinator.com/submit',
-            }
-        ]
         input_data = {
             'title': 'New post',
             'url': 'https://google.com',
