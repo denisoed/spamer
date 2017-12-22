@@ -3,6 +3,9 @@ from django.urls import reverse
 from portal.forms import PortalForm
 from portal.models import Portal
 from portal.views import find_selected_portal
+from unittest.mock import patch
+from portal.views import create_portal
+from django.test import RequestFactory
 
 
 client = Client()
@@ -82,3 +85,10 @@ class ViewTest(TestCase):
         self.assertEqual(r.status_code, 302)
         self.assertRedirects(r, '/main/',
                              status_code=302, target_status_code=200)
+
+    @patch('portal.tasks.go_authenticate')
+    def test_for_create_portal(self, mock_go_authenticate):
+        mock_go_authenticate.return_value = True
+        request_factory = RequestFactory()
+        request = request_factory.get('/portal/create/', data=None)
+        self.assertEqual(create_portal(request).status_code, 302)
