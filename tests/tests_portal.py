@@ -4,7 +4,7 @@ from portal.forms import PortalForm
 from portal.models import Portal
 from portal.views import find_selected_portal
 from unittest.mock import patch
-from portal.views import create_portal
+from portal.views import create_new_portal
 from django.test import RequestFactory
 
 
@@ -74,7 +74,6 @@ class ViewTest(TestCase):
     def test_for_find_selected_portal(self):
         data = 'Hacker news'
         name_obj = find_selected_portal(data)['name']
-        print(name_obj)
         self.assertEqual(name_obj, data)
 
     def test_for_delete_portals(self):
@@ -87,8 +86,54 @@ class ViewTest(TestCase):
                              status_code=302, target_status_code=200)
 
     @patch('portal.tasks.go_authenticate')
-    def test_for_create_portal(self, mock_go_authenticate):
-        mock_go_authenticate.return_value = True
+    def test_for_create_portal_error(self, mock_go_authenticate):
+        mock_go_authenticate.return_value = False
         request_factory = RequestFactory()
         request = request_factory.get('/portal/create/', data=None)
-        self.assertEqual(create_portal(request).status_code, 302)
+        obj_portal = {
+            'name': 'Hacker news',
+            'url_auth': 'https://news.ycombinator.com/login',
+            'url_logout': 'https://news.ycombinator.com/',
+            'url_submit': 'https://news.ycombinator.com/submit',
+            'inp_login': 'acct',
+            'inp_password': 'pw',
+            'inp_title': 'title',
+            'inp_url': 'url',
+            'inp_text': 'text',
+            'auth_by': '<form method="post" action="login">',
+            'auth_complete': '<span class="pagetop">'
+        }
+        login = 'denisoed'
+        password = 'gorod312'
+        selected_portal = Portal.objects.create(name='Hacker News',
+                                                user="user1")
+        self.assertEqual(create_new_portal(request, obj_portal,
+                                           login, password,
+                                           selected_portal).status_code, 302)
+
+    @patch('django.contrib.auth.get_user')
+    def test_for_portal_create(self, mock_get_user):
+        mock_get_user.return_value = 'gulya'
+        request_factory = RequestFactory()
+        obj_portal = {
+            'name': 'Hacker news',
+            'url_auth': 'https://news.ycombinator.com/login',
+            'url_logout': 'https://news.ycombinator.com/',
+            'url_submit': 'https://news.ycombinator.com/submit',
+            'inp_login': 'acct',
+            'inp_password': 'pw',
+            'inp_title': 'title',
+            'inp_url': 'url',
+            'inp_text': 'text',
+            'auth_by': '<form method="post" action="login">',
+            'auth_complete': '<span class="pagetop">'
+        }
+        login = 'denisoed'
+        password = 'gorod312'
+        selected_portal = Portal.objects.create(name='Hacker News',
+                                                user='')
+        request = request_factory.get(reverse('portal:create_portal'),
+                                      data=None)
+        self.assertEqual(create_new_portal(request, obj_portal, login,
+                                           password,
+                                           selected_portal).status_code, 302)
