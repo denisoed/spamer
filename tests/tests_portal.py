@@ -4,9 +4,8 @@ from portal.forms import PortalForm
 from portal.models import Portal
 from portal.views import find_selected_portal
 from unittest.mock import patch
-from portal.views import create_new_portal
+from portal.views import create_new_portal, create_portal
 from django.test import RequestFactory
-
 
 client = Client()
 
@@ -77,7 +76,6 @@ class ViewTest(TestCase):
         self.assertEqual(name_obj, data)
 
     def test_for_delete_portals(self):
-
         data = {'login': 'login', 'password': '2323232'}
         r = self.client.post(reverse('portal:delete_portal',
                                      kwargs={'id_portal': 1}), data=data)
@@ -86,7 +84,7 @@ class ViewTest(TestCase):
                              status_code=302, target_status_code=200)
 
     @patch('portal.tasks.go_authenticate')
-    def test_for_create_portal_error(self, mock_go_authenticate):
+    def test_for_error_when_portal_creates(self, mock_go_authenticate):
         mock_go_authenticate.return_value = False
         request_factory = RequestFactory()
         request = request_factory.get('/portal/create/', data=None)
@@ -137,3 +135,11 @@ class ViewTest(TestCase):
         self.assertEqual(create_new_portal(request, obj_portal, login,
                                            password,
                                            selected_portal).status_code, 302)
+
+    @patch('portal.views.create_new_portal', return_value="redirect")
+    def test_if_portal_does_not_exist(self, mock_create_new_portal):
+        request = RequestFactory()
+        data = {'name': "Denis", 'user': "admin",
+                'login': 'user', 'password': '12345678'}
+        request = request.post('/portal/create/', data=data)
+        self.assertEqual(create_portal(request).status_code, 302)
