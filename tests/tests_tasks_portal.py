@@ -1,5 +1,6 @@
 import unittest
 
+
 from django.test import TestCase, Client
 from unittest.mock import patch
 from portal import tasks
@@ -28,7 +29,9 @@ class TestTasks(TestCase):
             }
         self.uncorrect_portal = {
                 'url_auth': 'https://google.com',
-                'auth_by': '<form method="post" action="login">'
+                'auth_by': '<form method="post" action="login">',
+                'inp_login': 'acct',
+                'inp_password': 'pw',
             }
 
     @patch('portal.tasks.auth_portal')
@@ -36,16 +39,18 @@ class TestTasks(TestCase):
         mock_auth_portal.return_value = True
         self.assertTrue(tasks.get_login_page(self.portal, None, None))
 
-    @patch('portal.tasks.auth_portal')
-    def test_get_login_page_datanotfound(self, mock_auth_portal):
-        mock_auth_portal.return_value = True
-        self.assertTrue(tasks.get_login_page(
-            self.uncorrect_portal, None, None))
-
     def test_auth_portal_true(self):
         GRAB.setup(timeout=10, connect_timeout=10)
         response = GRAB.go(self.portal['url_auth'])
         login = 'denisoed'
+        password = 'gorod312'
+        self.assertTrue(tasks.auth_portal(
+            response, self.portal, login, password))
+
+    def test_auth_portal_error_login_or_password(self):
+        GRAB.setup(timeout=10, connect_timeout=10)
+        response = GRAB.go(self.portal['url_auth'])
+        login = 'denis'
         password = 'gorod312'
         self.assertTrue(tasks.auth_portal(
             response, self.portal, login, password))
@@ -97,11 +102,7 @@ class TestTasks(TestCase):
     @patch('portal.tasks.fill_fields')
     @patch('portal.tasks.send')
     def test_send_spam(self, mock_fill_fields, mock_send):
-        portals = [
-            {
-                'url_submit': 'https://news.ycombinator.com/submit',
-            }
-        ]
+        portal_name = ['Hacker news', 'Hacker news']
         input_data = {
             'title': 'New post',
             'url': 'https://google.com',
@@ -111,33 +112,12 @@ class TestTasks(TestCase):
         response = GRAB.go('https://news.ycombinator.com/submit')
         mock_fill_fields.return_value = response
         mock_send.return_value = True
-        self.assertTrue(tasks.send_spam(input_data, portals))
+        self.assertTrue(tasks.send_spam(input_data, portal_name))
 
-    def test_get_selected_logout_portal(self):
-        portal = [
-            {
-                'name': 'Hacker news',
-                'url_auth': 'https://news.ycombinator.com/login',
-                'url_logout': 'https://news.ycombinator.com/',
-                'url_submit': 'https://news.ycombinator.com/submit',
-                'inp_login': 'acct',
-                'inp_password': 'pw',
-                'inp_title': 'title',
-                'inp_url': 'url',
-                'inp_text': 'text',
-                'auth_by': '<form method="post" action="login">',
-                'auth_complete': '<span class="pagetop">'
-            }
-        ]
-        self.assertEqual(tasks.get_selected_logout_portal(portal), portal[0])
-
-    def test_get_selected_logout_portal_false(self):
-        portal = [
-            {
-                'name': 'laBuda'
-            }
-        ]
-        self.assertFalse(tasks.get_selected_logout_portal(portal))
+    def test_send(self):
+        GRAB.go('https://google.com')
+        GRAB.set_input('q', 'python')
+        self.assertEqual(tasks.send(GRAB).code, 200)
 
     @patch('portal.tasks.get_login_page')
     def test_go_authenticate_true(self, mock_get_login_page):
