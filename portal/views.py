@@ -21,8 +21,7 @@ def create_portal(request):
                 messages.error(
                     request, "Портал уже существует в вашем списке!")
             else:
-                create_new_portal(request, obj_portal, login,
-                                  password, selected_portal)
+                create_new_portal(request, obj_portal, login, password, selected_portal)
         else:
             messages.error(request, "Форма не валидна")
         return redirect('/main/')
@@ -32,8 +31,7 @@ def create_portal(request):
 
 def create_new_portal(request, obj_portal, login, password,
                       selected_portal):
-    auth_portal_complate = tasks.go_authenticate(request,
-                                                 obj_portal, login, password)
+    auth_portal_complate = tasks.go_authenticate(request, obj_portal, login, password)
     if auth_portal_complate is True:
         user = auth.get_user(request)
         selected_portal.user = user
