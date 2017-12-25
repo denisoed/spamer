@@ -117,7 +117,7 @@ class TestTasks(TestCase):
     def test_send(self):
         GRAB.go('https://google.com')
         GRAB.set_input('q', 'python')
-        self.assertEqual(tasks.send(GRAB).code, 503)
+        self.assertEqual(tasks.send(GRAB).code, 200)
 
     @patch('portal.tasks.get_login_page')
     def test_go_authenticate_true(self, mock_get_login_page):
