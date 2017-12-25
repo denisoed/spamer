@@ -45,6 +45,6 @@ class ViewTest(TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_empty_data(self):
-        responce = self.client.get('/main/', self.empty_data, follow=True)
+        responce = self.client.post('/main/', self.empty_data)
         self.assertTemplateUsed('index.html')
-        self.assertEqual(responce.status_code, 200)
+        self.assertEqual(responce.status_code, 302)
