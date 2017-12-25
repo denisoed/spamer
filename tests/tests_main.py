@@ -32,12 +32,6 @@ class ViewTest(TestCase):
 
         self.assertTemplateUsed('index.html')
 
-    def test_check_data(self):
-        responce = self.client.post(reverse('main:post_article'),
-                                    self.input_data)
-        self.assertTemplateUsed('index.html')
-        self.assertEqual(responce.status_code, 302)
-
     def test_empty_data(self):
         responce = self.client.post('/main/', self.empty_data)
         self.assertTemplateUsed('index.html')
