@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from portal.forms import PortalForm
 from portal.models import Portal
-from portal.tasks import send_spam
 
 
 def catch_data(request):
@@ -33,6 +32,5 @@ def catch_data(request):
             context = {
                 'portal_form': portal_form
             }
-            send_spam.delay(input_data, portal_sel)
         return redirect('/main/')
     return render(request, 'index.html', context)
