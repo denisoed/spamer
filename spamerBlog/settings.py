@@ -140,5 +140,4 @@ CELERY_SEND_EVENTS = True
 # место хранения периодических задач (данные для планировщика)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
-
 djcelery.setup_loader()
