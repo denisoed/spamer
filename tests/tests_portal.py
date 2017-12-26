@@ -83,56 +83,17 @@ class ViewTest(TestCase):
         self.assertRedirects(r, '/main/',
                              status_code=302, target_status_code=200)
 
-    @patch('portal.tasks.go_authenticate')
-    def test_for_error_when_portal_creates(self, mock_go_authenticate):
-        mock_go_authenticate.return_value = False
-        request_factory = RequestFactory()
-        request = request_factory.get('/portal/create/', data=None)
-        obj_portal = {
-            'name': 'Hacker news',
-            'url_auth': 'https://news.ycombinator.com/login',
-            'url_logout': 'https://news.ycombinator.com/',
-            'url_submit': 'https://news.ycombinator.com/submit',
-            'inp_login': 'acct',
-            'inp_password': 'pw',
-            'inp_title': 'title',
-            'inp_url': 'url',
-            'inp_text': 'text',
-            'auth_by': '<form method="post" action="login">',
-            'auth_complete': '<span class="pagetop">'
-        }
-        login = 'denisoed'
-        password = 'gorod312'
-        selected_portal = Portal.objects.create(name='Hacker News',
-                                                user="user1")
-        self.assertEqual(create_new_portal(request, obj_portal,
-                                           login, password,
-                                           selected_portal).status_code, 302)
-
     @patch('django.contrib.auth.get_user')
     def test_for_portal_create(self, mock_get_user):
         mock_get_user.return_value = 'gulya'
         request_factory = RequestFactory()
-        obj_portal = {
-            'name': 'Hacker news',
-            'url_auth': 'https://news.ycombinator.com/login',
-            'url_logout': 'https://news.ycombinator.com/',
-            'url_submit': 'https://news.ycombinator.com/submit',
-            'inp_login': 'acct',
-            'inp_password': 'pw',
-            'inp_title': 'title',
-            'inp_url': 'url',
-            'inp_text': 'text',
-            'auth_by': '<form method="post" action="login">',
-            'auth_complete': '<span class="pagetop">'
-        }
         login = 'denisoed'
         password = 'gorod312'
         selected_portal = Portal.objects.create(name='Hacker News',
                                                 user='')
         request = request_factory.get(reverse('portal:create_portal'),
                                       data=None)
-        self.assertEqual(create_new_portal(request, obj_portal, login,
+        self.assertEqual(create_new_portal(request, login,
                                            password,
                                            selected_portal).status_code, 302)
 

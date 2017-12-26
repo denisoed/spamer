@@ -58,12 +58,25 @@ def go_authenticate(request, portal, login, password):
 def send_spam(input_data, portals):
     portals_list = get_selected_portal(portals)
     for p in range(len(portals_list)):
+        GRAB.setup(timeout=10, connect_timeout=10)
+        url_auth = portals_list[p]['url_auth']
+        GRAB.go(url_auth, log_file='templates/grab/bug_auth_portal.html')
+        GRAB.doc.set_input(portals_list[p]['inp_login'], input_data['login'])
+        GRAB.doc.set_input(portals_list[p]['inp_password'],
+                           input_data['password'])
+        GRAB.doc.submit()
+        GRAB.setup(timeout=10, connect_timeout=10)
         url_submit = portals_list[p]['url_submit']
-        parse_page = GRAB.go(
-            url_submit, log_file='templates/grab/bug_submit.html')
-        portal = fill_fields(parse_page, portals_list[p], input_data)
-        send(portal)
-    return True
+        GRAB.go(
+            url_submit,
+            log_file='templates/grab/bug_submit.html')
+        GRAB.doc.set_input(
+            portals_list[p]['inp_title'], input_data['title'])
+        GRAB.doc.set_input(
+            portals_list[p]['inp_url'], input_data['url'])
+        GRAB.doc.set_input(
+            portals_list[p]['inp_text'], input_data['description'])
+        GRAB.doc.submit()
 
 
 def send(portal):
