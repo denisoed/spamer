@@ -5,8 +5,7 @@ import logging
 from grab import Grab, DataNotFound
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
-from spamerBlog.celery import app
-
+from celery.task import task
 
 default_logging()
 LOGGER = logging.getLogger('grab')
@@ -22,7 +21,7 @@ GRAB = Grab()
 def get_login_page(portal, login, password):
     """ Authenticate selected portal """
     url_login = portal['url_auth']
-    GRAB.setup(timeout=10, connect_timeout=10, reuse_cookies=False)
+    GRAB.setup(timeout=10, connect_timeout=10)
     page_auth = GRAB.go(
         url_login, log_file='templates/grab/bug_auth_portal.html')
     page_auth.text_search(portal['auth_by'])
@@ -55,7 +54,7 @@ def go_authenticate(request, portal, login, password):
 
 
 # //////////////// Send spam ///////////////// #
-@app.task
+@task(ignore_result=True, max_retries=1, default_retry_delay=10)
 def send_spam(input_data, portals):
     portals_list = get_selected_portal(portals)
     for p in range(len(portals_list)):
