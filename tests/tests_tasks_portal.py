@@ -99,21 +99,6 @@ class TestTasks(TestCase):
         self.assertEqual(
             tasks.fill_fields(response, portal, input_data), response)
 
-    @patch('portal.tasks.fill_fields')
-    @patch('portal.tasks.send')
-    def test_send_spam(self, mock_fill_fields, mock_send):
-        portal_name = ['Hacker news', 'Hacker news']
-        input_data = {
-            'title': 'New post',
-            'url': 'https://google.com',
-            'description': 'Best best best'
-        }
-        GRAB.setup(timeout=10, connect_timeout=10)
-        response = GRAB.go('https://news.ycombinator.com/submit')
-        mock_fill_fields.return_value = response
-        mock_send.return_value = True
-        self.assertTrue(tasks.send_spam(input_data, portal_name))
-
     def test_send(self):
         GRAB.go('https://google.com')
         GRAB.set_input('q', 'python')
