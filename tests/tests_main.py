@@ -1,8 +1,4 @@
 from django.test import TestCase, Client
-from django.urls import reverse
-from unittest.mock import patch
-from django.test import RequestFactory
-from main.views import catch_data
 
 
 class ViewTest(TestCase):
