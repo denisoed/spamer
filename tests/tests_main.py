@@ -1,4 +1,8 @@
 from django.test import TestCase, Client
+from django.urls import reverse
+from unittest.mock import patch
+from django.test import RequestFactory
+from main.views import catch_data
 
 
 class ViewTest(TestCase):
@@ -28,6 +32,7 @@ class ViewTest(TestCase):
     def test_for_connection(self):
         responce = self.client.get('http://127.0.0.1:8000/main/')
         self.assertEqual(responce.status_code, 200)
+
         self.assertTemplateUsed('index.html')
 
     def test_empty_data(self):
