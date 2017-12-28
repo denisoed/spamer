@@ -26,7 +26,7 @@ def send_spam(input_data, portals):
         GRAB.go(
             url_submit, log_file='templates/grab/bug_submit.html')
         portal = fill_fields(GRAB, portals_list[p], input_data)
-        #send(portal)
+        send(portal)
     return True
 
 
