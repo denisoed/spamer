@@ -5,7 +5,6 @@ from django.test import TestCase, Client
 from unittest.mock import patch
 from portal import tasks
 from grab import Grab
-from django.test import RequestFactory
 
 
 GRAB = Grab()
@@ -34,35 +33,33 @@ class TestTasks(TestCase):
                 'inp_password': 'pw',
             }
 
-    @patch('portal.tasks.auth_portal')
-    def test_get_login_page(self, mock_auth_portal):
-        mock_auth_portal.return_value = True
-        self.assertTrue(tasks.get_login_page(self.portal, None, None))
-
-    def test_auth_portal_true(self):
-        GRAB.setup(timeout=10, connect_timeout=10)
-        response = GRAB.go(self.portal['url_auth'])
-        login = 'denisoed'
-        password = 'gorod312'
-        self.assertTrue(tasks.auth_portal(
-            response, self.portal, login, password))
-
-    def test_auth_portal_error_login_or_password(self):
-        GRAB.setup(timeout=10, connect_timeout=10)
-        response = GRAB.go(self.portal['url_auth'])
-        login = 'denis'
-        password = 'gorod312'
-        self.assertTrue(tasks.auth_portal(
-            response, self.portal, login, password))
-
-    def test_auth_portal_datanotfound(self):
-        GRAB.setup(timeout=10, connect_timeout=10)
-        response = GRAB.go(self.uncorrect_portal['url_auth'])
-        login = 'denisoed'
-        password = 'gorod312'
-        error = "Вы уже аутентифицированы"
-        self.assertEqual(tasks.auth_portal(
-            response, self.portal, login, password), error)
+    @patch('portal.tasks.get_selected_portal')
+    @patch('portal.tasks.send', return_value=200)
+    def test_send_spam(self, mock_get_selected_portal, mock_send):
+        portal = [
+            {
+                'name': 'Hacker news',
+                'url_auth': 'https://news.ycombinator.com/login',
+                'url_submit': 'https://news.ycombinator.com/submit',
+                'inp_login': 'acct',
+                'inp_password': 'pw',
+                'inp_title': 'title',
+                'inp_url': 'url',
+                'inp_text': 'text',
+                'auth_by': '<form method="post" action="login">',
+                'auth_complete': '<span class="pagetop">'
+            }
+        ]
+        mock_get_selected_portal.return_value = portal
+        port_list = ['Hacker news']
+        correct_data = {
+            'login': 'denisoed',
+            'password': 'gorod312',
+            'title': 'Title',
+            'url': 'https://google.com',
+            'description': 'bla bla bla'
+        }
+        self.assertTrue(tasks.send_spam(correct_data, port_list))
 
     def test_get_selected_portal(self):
         portal = [
@@ -83,52 +80,9 @@ class TestTasks(TestCase):
         data = ['Hacker news']
         self.assertEqual(tasks.get_selected_portal(data), portal)
 
-    def test_fill_fields(self):
-        portal = {
-            'inp_title': 'title',
-            'inp_url': 'url',
-            'inp_text': 'text',
-        }
-        input_data = {
-            'title': 'New post',
-            'url': 'https://google.com',
-            'description': 'Best best best'
-        }
-        GRAB.setup(timeout=10, connect_timeout=10)
-        response = GRAB.go('https://news.ycombinator.com/submit')
-        self.assertEqual(
-            tasks.fill_fields(response, portal, input_data), response)
-
     def test_send(self):
         GRAB.go('https://google.com')
-        GRAB.set_input('q', 'python')
         self.assertEqual(tasks.send(GRAB).code, 200)
-
-    @patch('portal.tasks.get_login_page')
-    def test_go_authenticate_true(self, mock_get_login_page):
-        mock_get_login_page.return_value = True
-        request_factory = RequestFactory()
-        request = request_factory.get('/portal/create/', data=None)
-        portal = {
-            'name': 'Hacker news'
-        }
-        login = 'denisoed'
-        password = 'gorod312'
-        self.assertTrue(
-            tasks.go_authenticate(request, portal, login, password))
-
-    @patch('portal.tasks.get_login_page')
-    def test_go_authenticate_false(self, mock_get_login_page):
-        mock_get_login_page.return_value = False
-        request_factory = RequestFactory()
-        request = request_factory.get('/portal/create/', data=None)
-        portal = {
-            'name': 'Hacker news'
-        }
-        login = 'denisoed'
-        password = 'gorod312'
-        self.assertFalse(
-            tasks.go_authenticate(request, portal, login, password))
 
 
 if __name__ == '__main__':
