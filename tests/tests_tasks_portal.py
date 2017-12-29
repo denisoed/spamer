@@ -80,10 +80,6 @@ class TestTasks(TestCase):
         data = ['Hacker news']
         self.assertEqual(tasks.get_selected_portal(data), portal)
 
-    def test_send(self):
-        GRAB.go('https://google.com')
-        self.assertEqual(tasks.send(GRAB).code, 200)
-
 
 if __name__ == '__main__':
     unittest.main()

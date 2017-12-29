@@ -8,17 +8,16 @@ from portal.tasks import send_spam
 
 def catch_data(request):
     portal_form = PortalForm()
-    portals_user = Portal.objects.filter(user=auth.get_user(request).username)
+    portals_user = Portal.objects.filter(user=auth.get_user(request))
     context = {
         'portal_form': portal_form,
         'portals_user': portals_user,
-        'user': auth.get_user(request).username
+        'user': auth.get_user(request)
     }
     if request.method == 'POST':
         portal_form = PortalForm(request.POST or None)
 
         portal_sel = request.POST.getlist('selected_portal')
-        print(portal_sel)
         if request.POST.get('title') == '' \
                 and request.POST.get('url') == '':
             context = {
