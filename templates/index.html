@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load staticfiles %} {% block content %}
 <div class="wrapper">
-
+{% if user.is_authenticated %}
     {% if messages %}
     <ul class="messages" id="messages">
         {% for message in messages %}
@@ -21,12 +21,12 @@
         {% endif %}
     </header>
 
-    <!-- Right panel -->
+    <!— Right panel —>
     <aside class="right_panel">
         <div class="logo">
             <a href="/main">Spamer</a>
         </div>
-        <!-- Button HTML (to Trigger Modal) -->
+        <!— Button HTML (to Trigger Modal) —>
         <button class="add_portal" data-toggle="modal" href="#myModal" role="button">
             <i class="fa fa-plus"></i>
         </button>
@@ -47,7 +47,7 @@
         </div>
     </aside>
 
-    <!-- Modal HTML -->
+    <!— Modal HTML —>
     <div id="myModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -71,7 +71,7 @@
                             <option value="Reddit">Reddit</option>
                             <option value="Habrahabr">Habrahabr</option>
                         </select>
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="add_portal_btn">Add new portal</button>
@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    <!-- Working zone -->
+    <!— Working zone —>
     <section class="main">
         <div class="container">
             <h1 class="main_bg">Spamer</h1>
@@ -91,16 +91,17 @@
             <form action="/catch_data/" method="POST" class="form">{% csrf_token %}
 
                 <div class="selected_portals">
-                    <!-- Selected portals-->
+                    <!— Selected portals-->
                     {% if portals_user %} {% for portal in portals_user %}
                         <input type="text" value="{{ portal.name }}" name="selected_portal">
-                    {% endfor %}    
+                    {% endfor %}
                     {% endif %}
                 </div>
 
-                <div class="inputs_text">
+Denis Grushkin, [29.12.17 17:57]
+<div class="inputs_text">
                     <div class="form-group">
-                        <!-- Input title -->
+                        <!— Input title —>
                         <ul class="inp_error">
                             {% if empty %}
                             <li>
@@ -114,7 +115,7 @@
                         </ul>
                         <input type="text" id="inp_title" name="title" placeholder="Title" autocomplete="off">
 
-                        <!-- Input url -->
+                        <!— Input url —>
                         <ul class="inp_error">
                             {% if empty %}
                             <li>
@@ -124,14 +125,17 @@
                         </ul>
                         <input type="text" id="inp_url" name="url" placeholder="Url" autocomplete="off">
                     </div>
-                    <!-- Textarea -->
+                    <!— Textarea —>
                     <textarea id="mytextarea"></textarea>
                 </div>
-                <!-- Button -->
+                <!— Button —>
                 <button type="submit" class="btn_submit" id="btn_submit">Начать рассылку</button>
             </form>
             {% endif %}
         </div>
     </section>
+{% else %}
+     {% include "login.html" %}
+{% endif %}
 </div>
 {% endblock %}
