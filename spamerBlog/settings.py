@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,14 +129,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-BROKER_URL = 'redis://localhost:6379/0'
-# храним результаты выполнения задач так же в redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-# в течение какого срока храним результаты, после чего они удаляются
-CELERY_TASK_RESULT_EXPIRES = 7*86400  # 7 days
-# это нужно для мониторинга наших воркеров
-CELERY_SEND_EVENTS = True
-# место хранения периодических задач (данные для планировщика)
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-
-djcelery.setup_loader()
+BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Bishkek'
