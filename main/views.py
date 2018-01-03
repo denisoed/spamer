@@ -24,8 +24,6 @@ def catch_data(request):
                 'empty': 'Это поле обязательное!'}
         else:
             input_data = {
-                'login': portals_user[0].login,
-                'password': portals_user[0].password,
                 'title': request.POST.get('title'),
                 'url': request.POST.get('url'),
                 'description': request.POST.get('description')

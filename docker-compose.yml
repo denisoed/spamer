@@ -1,24 +1,25 @@
 version: '2'
 
-version: '2'
-
 services:
 
   web:
-    restart: always
     build: .
-    command: bash -c "python3 manage.py migrate;
-             python3 manage.py runserver 0.0.0.0:8000;
-             python manage.py celery worker -B —loglevel=debug —concurrency=4"
-    volumes:
-      - .:/project
+    command: bash -c "python3 manage.py migrate; python3 manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
+    links:
+      - celery
+    depends_on:
+      - celery
+
+  redis:
+    image: redis
+
+  celery:
+    image: celery
+    build: .
+    command: bash -c "celery worker -A spamerBlog --loglevel=INFO"
     links:
       - redis
     depends_on:
       - redis
-
-  redis:
-    image: redis
-    hostname: localhost

@@ -6,6 +6,7 @@ from grab import Grab
 from grab.util.log import default_logging
 from portal.list_portals import list_portals
 from celery.task import task
+from .models import Portal
 
 default_logging()
 LOGGER = logging.getLogger('grab')
@@ -22,7 +23,17 @@ GRAB = Grab()
 def send_spam(input_data, portals):
     portals_list = get_selected_portal(portals)
     for p in range(len(portals_list)):
+        portal = Portal.objects.filter(name=portals_list[p]['name'])
+        url_login = portals_list[p]['url_auth']
+        print(url_login)
+        GRAB.setup(timeout=10, connect_timeout=10)
+        GRAB.go(url_login, log_file='templates/grab/bug_auth_portal.html')
+
+        GRAB.doc.set_input(portals_list[p]['inp_login'], portal[0].login)
+        GRAB.doc.set_input(portals_list[p]['inp_password'], portal[0].password)
+        send(GRAB)
         url_submit = portals_list[p]['url_submit']
+        GRAB.setup(timeout=10, connect_timeout=10)
         GRAB.go(
             url_submit, log_file='templates/grab/bug_submit.html')
         portal = fill_fields(GRAB, portals_list[p], input_data)
