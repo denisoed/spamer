@@ -31,6 +31,6 @@ def catch_data(request):
             context = {
                 'portal_form': portal_form
             }
-            send_spam.delay(input_data, portal_sel)
+            send_spam(input_data, portal_sel)
         return redirect('/main/')
     return render(request, 'index.html', context)

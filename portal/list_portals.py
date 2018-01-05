@@ -26,11 +26,12 @@ list_portals = [
     },
     {
         'name': 'Reddit',
-        'url_auth': 'https://www.reddit.com/',
-        'url_submit': 'https://www.reddit.com/api/live/create',
+        'url_auth': 'https://www.reddit.com/login',
+        'url_submit': 'https://www.reddit.com/submit',
         'inp_login': 'user',
         'inp_password': 'passwd',
         'inp_title': 'title',
+        'inp_url': 'url',
         'inp_text': 'description',
         'auth_by': 'action="https://www.reddit.com/post/login"',
         'auth_complete': '<span class="user">'

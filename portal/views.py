@@ -6,6 +6,7 @@ from django.contrib import auth
 from .forms import PortalForm
 from .list_portals import list_portals
 from .models import Portal
+from .tasks import go_authenticate
 
 
 def create_portal(request):
@@ -15,10 +16,12 @@ def create_portal(request):
             selected_portal = portal_form.save(commit=False)
             login = portal_form.cleaned_data['login']
             password = portal_form.cleaned_data['password']
+            portal = find_selected_portal(request.POST.get('portals'))
             if Portal.objects.filter(name=selected_portal.name):
                 messages.error(
                     request, "Портал уже существует в вашем списке!")
             else:
+                go_authenticate(request, portal, login, password)
                 create_new_portal(request, login,
                                   password, selected_portal)
         else:

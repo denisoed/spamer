@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load staticfiles %} {% block content %}
 <div class="wrapper">
-{% if user.is_authenticated %}
+<!-- {% if user.is_authenticated %} -->
     {% if messages %}
     <ul class="messages" id="messages">
         {% for message in messages %}
@@ -98,7 +98,6 @@
                     {% endif %}
                 </div>
 
-Denis Grushkin, [29.12.17 17:57]
 <div class="inputs_text">
                     <div class="form-group">
                         <!— Input title —>
@@ -134,8 +133,8 @@ Denis Grushkin, [29.12.17 17:57]
             {% endif %}
         </div>
     </section>
-{% else %}
-     {% include "login.html" %}
-{% endif %}
+<!-- {% else %} -->
+     <!-- {% include "login.html" %} -->
+<!-- {% endif %}` -->
 </div>
 {% endblock %}
