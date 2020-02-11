@@ -2,7 +2,7 @@ astroid==1.5.3
 certifi==2017.7.27.1
 chardet==3.0.4
 defusedxml==0.5.0
-Django==1.11.6
+Django==1.11.28
 grab==0.6.38
 idna==2.6
 isort==4.2.15
